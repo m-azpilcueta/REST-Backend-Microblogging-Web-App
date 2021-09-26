@@ -34,4 +34,14 @@ public class UserDaoJpa extends GenericDaoJpa implements UserDao {
   public void create(User user) {
     entityManager.persist(user);
   }
+  
+  private void delete(User user) {
+	  entityManager.remove(user);
+  }
+
+  @Override
+  public void deleteById(Long id) {
+	  User user = findById(id);
+	  delete(user);
+  }
 }

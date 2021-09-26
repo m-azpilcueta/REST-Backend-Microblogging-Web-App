@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import es.udc.asi.restexample.model.domain.Post;
 import es.udc.asi.restexample.model.domain.User;
 import es.udc.asi.restexample.model.domain.UserAuthority;
 import es.udc.asi.restexample.model.exception.UserLoginExistsException;
+import es.udc.asi.restexample.model.repository.PostDao;
 import es.udc.asi.restexample.model.repository.UserDao;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 import es.udc.asi.restexample.model.service.dto.UserDTOPublic;
@@ -25,6 +28,9 @@ public class UserService {
 
   @Autowired
   private UserDao userDAO;
+  
+  @Autowired
+  private PostDao postDAO;
 
   public List<UserDTOPublic> findAll() {
     return userDAO.findAll().stream().map(user -> new UserDTOPublic(user)).collect(Collectors.toList());
@@ -60,5 +66,19 @@ public class UserService {
       return new UserDTOPrivate(userDAO.findByLogin(currentUserLogin));
     }
     return null;
+  }
+  
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @Transactional(readOnly = false)
+  public void deleteById(Long id) {
+    List<Post> posts = postDAO.findAll();
+    
+    for (Post post:posts) {
+    	if (id == post.getAuthor().getId()) {
+    		postDAO.deleteById(post.getId());
+    	}
+    }
+    
+    userDAO.deleteById(id);
   }
 }
