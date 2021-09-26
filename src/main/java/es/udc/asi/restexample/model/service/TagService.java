@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,5 +23,13 @@ public class TagService {
   public List<TagDTO> findAll() {
     return tagDAO.findAll().stream().sorted(Comparator.comparing(Tag::getName)).map(TagDTO::new)
         .collect(Collectors.toList());
+  }
+  
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @Transactional(readOnly = false)
+  public TagDTO create(TagDTO tag) {
+    Tag bdTag = new Tag(tag.getName());
+    tagDAO.create(bdTag);
+    return new TagDTO(bdTag);
   }
 }
