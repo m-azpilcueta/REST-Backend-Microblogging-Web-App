@@ -11,4 +11,6 @@ public interface TagDao {
   Tag findById(Long id);
 
   void create(Tag tag);
+  
+  void update(Tag tag);
 }

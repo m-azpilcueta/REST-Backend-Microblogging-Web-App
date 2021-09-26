@@ -32,4 +32,13 @@ public class TagService {
     tagDAO.create(bdTag);
     return new TagDTO(bdTag);
   }
+  
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @Transactional(readOnly = false)
+  public TagDTO update(TagDTO tag) {
+    Tag bdTag = tagDAO.findById(tag.getId());
+    bdTag.setName(tag.getName());
+    tagDAO.update(bdTag);
+    return new TagDTO(bdTag);
+  }
 }
