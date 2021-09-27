@@ -17,62 +17,72 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "theUser")
 public class User {
-  @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
-  @SequenceGenerator(name = "user_generator", sequenceName = "user_seq")
-  private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_generator")
+	@SequenceGenerator(name = "user_generator", sequenceName = "user_seq")
+	private Long id;
 
-  @Column(unique = true)
-  private String login;
+	@Column(unique = true)
+	private String login;
 
-  private String password;
+	private String password;
 
-  @Enumerated(EnumType.STRING)
-  private UserAuthority authority;
+	@Enumerated(EnumType.STRING)
+	private UserAuthority authority;
 
-  @OneToMany(mappedBy = "author")
-  private List<Post> posts = new ArrayList<>();
+	@OneToMany(mappedBy = "author")
+	private List<Post> posts = new ArrayList<>();
 
-  public User() {
-  }
+	private boolean active = true;
 
-  public Long getId() {
-    return id;
-  }
+	public User() {
+	}
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public String getLogin() {
-    return login;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public void setLogin(String login) {
-    this.login = login;
-  }
+	public String getLogin() {
+		return login;
+	}
 
-  public String getPassword() {
-    return password;
-  }
+	public void setLogin(String login) {
+		this.login = login;
+	}
 
-  public void setPassword(String password) {
-    this.password = password;
-  }
+	public String getPassword() {
+		return password;
+	}
 
-  public UserAuthority getAuthority() {
-    return authority;
-  }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-  public void setAuthority(UserAuthority authority) {
-    this.authority = authority;
-  }
+	public UserAuthority getAuthority() {
+		return authority;
+	}
 
-  public List<Post> getPosts() {
-    return posts;
-  }
+	public void setAuthority(UserAuthority authority) {
+		this.authority = authority;
+	}
 
-  public void setPosts(List<Post> posts) {
-    this.posts = posts;
-  }
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
 }

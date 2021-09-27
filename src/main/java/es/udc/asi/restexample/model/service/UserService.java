@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import es.udc.asi.restexample.model.domain.Post;
 import es.udc.asi.restexample.model.domain.User;
 import es.udc.asi.restexample.model.domain.UserAuthority;
+import es.udc.asi.restexample.model.exception.NotFoundException;
+import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.exception.UserLoginExistsException;
 import es.udc.asi.restexample.model.repository.PostDao;
 import es.udc.asi.restexample.model.repository.UserDao;
@@ -58,6 +60,24 @@ public class UserService {
     }
 
     userDAO.create(user);
+  }
+  
+  @PreAuthorize("hasAuthority('ADMIN')")
+  @Transactional(readOnly = false)
+  public UserDTOPublic updateActive(Long id, boolean active) throws NotFoundException, OperationNotAllowed {
+    User user = userDAO.findById(id);
+    if (user == null) {
+      throw new NotFoundException(id.toString(), User.class);
+    }
+
+    UserDTOPrivate currentUser = getCurrentUserWithAuthority();
+    if (currentUser.getId().equals(user.getId())) {
+      throw new OperationNotAllowed("The user cannot activate/deactive itself");
+    }
+
+    user.setActive(active);
+    userDAO.update(user);
+    return new UserDTOPublic(user);
   }
 
   public UserDTOPrivate getCurrentUserWithAuthority() {
