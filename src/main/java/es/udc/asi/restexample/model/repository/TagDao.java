@@ -13,4 +13,6 @@ public interface TagDao {
   void create(Tag tag);
   
   void update(Tag tag);
+  
+  void deleteById(Long id);
 }
