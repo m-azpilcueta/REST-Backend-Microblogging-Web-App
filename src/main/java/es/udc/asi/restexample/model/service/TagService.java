@@ -1,9 +1,7 @@
 package es.udc.asi.restexample.model.service;
 
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import es.udc.asi.restexample.model.domain.Post;
 import es.udc.asi.restexample.model.domain.Tag;
+import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.repository.PostDao;
 import es.udc.asi.restexample.model.repository.TagDao;
 import es.udc.asi.restexample.model.service.dto.TagDTO;
@@ -49,25 +48,18 @@ public class TagService {
     return new TagDTO(bdTag);
   }
   
-  @PreAuthorize("hasAuthority('ADMIN')")
   @Transactional(readOnly = false)
-  public void deleteById(Long id) {
-	List<Post> posts = postDAO.findAll();
-	Set<Tag> tags;
-	
-	for (Post post:posts) {
-		tags = post.getTags();
-		if (!tags.isEmpty()) {
-			for (Iterator<Tag> i = tags.iterator(); i.hasNext();) {
-				Tag tag = i.next();
-				if (id == tag.getId()) {
-					i.remove();
-				}
-			}
-			postDAO.update(post);
-		}
-	}
-	 
-	tagDAO.deleteById(id);
+  public void deleteById(Long id) throws NotFoundException {
+    List<Post> posts = postDAO.findAllByTag(id);
+    Tag theTag = tagDAO.findById(id);
+    if (theTag == null) {
+      throw new NotFoundException(id.toString(), Tag.class);
+    }
+    posts.forEach(post -> {
+      post.getTags().remove(theTag);
+      postDAO.update(post);
+    });
+    tagDAO.delete(theTag);
   }
+
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import es.udc.asi.restexample.model.domain.Tag;
+import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.service.TagService;
 import es.udc.asi.restexample.model.service.dto.TagDTO;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
@@ -56,7 +57,7 @@ public class TagResource {
   }
   
   @DeleteMapping("/{id}")
-  public void delete(@PathVariable Long id) {
+  public void delete(@PathVariable Long id) throws NotFoundException {
     tagService.deleteById(id);
   }
 }

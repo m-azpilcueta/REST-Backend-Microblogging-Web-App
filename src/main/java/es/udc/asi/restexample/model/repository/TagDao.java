@@ -14,5 +14,5 @@ public interface TagDao {
   
   void update(Tag tag);
   
-  void deleteById(Long id);
+  void delete(Tag tag);
 }

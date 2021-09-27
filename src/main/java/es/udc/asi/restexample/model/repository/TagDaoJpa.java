@@ -30,13 +30,8 @@ public class TagDaoJpa extends GenericDaoJpa implements TagDao {
     entityManager.merge(tag);
   }
   
-  private void delete(Tag tag) {
-	entityManager.remove(tag);
-  }
-  
   @Override
-  public void deleteById(Long id) {
-    Tag tag = findById(id);
-    delete(tag);
+  public void delete(Tag tag) {
+    entityManager.remove(tag);
   }
 }

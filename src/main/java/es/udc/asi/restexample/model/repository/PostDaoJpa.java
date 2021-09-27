@@ -30,8 +30,10 @@ public class PostDaoJpa extends GenericDaoJpa implements PostDao {
     entityManager.merge(post);
   }
 
-  private void delete(Post post) {
-    entityManager.remove(post);
+  @Override
+  public List<Post> findAllByTag(Long tagId) {
+    return entityManager.createQuery("select p from Post p join p.tags pt where pt.id = :tagId", Post.class)
+        .setParameter("tagId", tagId).getResultList();
   }
 
   @Override
@@ -39,4 +41,8 @@ public class PostDaoJpa extends GenericDaoJpa implements PostDao {
     Post post = findById(id);
     delete(post);
   }
+  
+  private void delete(Post post) {
+	    entityManager.remove(post);
+	  }
 }
