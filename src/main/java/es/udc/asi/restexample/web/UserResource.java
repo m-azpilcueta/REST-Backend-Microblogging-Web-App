@@ -27,6 +27,11 @@ public class UserResource {
     return userService.findAll();
   }
   
+  @GetMapping("/{id}")
+  public UserDTOPublic findOne(@PathVariable Long id) throws NotFoundException {
+	return userService.findById(id);  
+  }
+  
   @DeleteMapping("/{id}")
   public void delete(@PathVariable Long id) {
     userService.deleteById(id);

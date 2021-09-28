@@ -37,6 +37,14 @@ public class UserService {
   public List<UserDTOPublic> findAll() {
     return userDAO.findAll().stream().map(user -> new UserDTOPublic(user)).collect(Collectors.toList());
   }
+  
+  public UserDTOPublic findById(Long id) throws NotFoundException {
+	  User user = userDAO.findById(id);
+	  if (user == null) {
+		  throw new NotFoundException(id.toString(), User.class);
+	  }
+	  return new UserDTOPublic(user);
+  }
 
   @Transactional(readOnly = false)
   public void registerUser(String login, String password) throws UserLoginExistsException {
