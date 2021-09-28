@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 
 import com.sun.istack.NotNull;
 
 import es.udc.asi.restexample.model.domain.Post;
+import es.udc.asi.restexample.model.domain.Tag;
 
 public class PostDTO {
 	private Long id;
@@ -35,6 +37,18 @@ public class PostDTO {
 		});
 		this.tags.sort(Comparator.comparing(TagDTO::getName));
 		this.timestamp = post.getTimestamp();
+	}
+	
+	
+
+	public PostDTO(Long id, @NotEmpty String title, @NotEmpty String body, Set<Tag> tags, LocalDateTime timestamp) {
+		this.id = id;
+		this.title = title;
+		this.body = body;
+		tags.forEach(t -> {
+			this.tags.add(new TagDTO(t));
+		});
+		this.timestamp = timestamp;
 	}
 
 	public Long getId() {

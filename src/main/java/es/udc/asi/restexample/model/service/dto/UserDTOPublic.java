@@ -1,11 +1,15 @@
 package es.udc.asi.restexample.model.service.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import es.udc.asi.restexample.model.domain.User;
 
 public class UserDTOPublic {
 	private Long id;
 	private String login;
 	private boolean active = true;
+	private List<PostDTO> posts = new ArrayList<>();
 
 	public UserDTOPublic() {
 	}
@@ -14,6 +18,9 @@ public class UserDTOPublic {
 		this.id = user.getId();
 		this.login = user.getLogin();
 		this.setActive(user.isActive());
+		user.getPosts().forEach((post) -> {
+			this.posts.add(new PostDTO(post.getId(), post.getTitle(), post.getBody(), post.getTags(), post.getTimestamp()));
+		});
 	}
 
 	public Long getId() {
@@ -38,5 +45,13 @@ public class UserDTOPublic {
 
 	public void setActive(boolean active) {
 		this.active = active;
+	}
+
+	public List<PostDTO> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<PostDTO> posts) {
+		this.posts = posts;
 	}
 }
