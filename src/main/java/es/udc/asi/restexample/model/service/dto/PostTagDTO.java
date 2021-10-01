@@ -18,7 +18,7 @@ public class PostTagDTO {
 	@NotEmpty
 	private String body;
 	@NotNull
-	private String author;
+	private UserBasicDTO author;
 	private List<TagDTO> tags = new ArrayList<>();
 	private LocalDateTime timestamp;
 	
@@ -26,7 +26,7 @@ public class PostTagDTO {
 		this.id = post.getId();
 		this.title = post.getTitle();
 		this.body = post.getBody();
-		this.author = post.getAuthor().getLogin();
+		this.author = new UserBasicDTO(post.getAuthor().getId(), post.getAuthor().getLogin());
 		post.getTags().forEach(t -> {
 			this.tags.add(new TagDTO(t));
 		});
@@ -58,11 +58,11 @@ public class PostTagDTO {
 		this.body = body;
 	}
 
-	public String getAuthor() {
+	public UserBasicDTO getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(String author) {
+	public void setAuthor(UserBasicDTO author) {
 		this.author = author;
 	}
 
