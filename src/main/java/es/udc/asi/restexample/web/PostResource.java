@@ -20,6 +20,7 @@ import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.service.PostService;
 import es.udc.asi.restexample.model.service.dto.PostDTO;
+import es.udc.asi.restexample.model.service.dto.PostTagDTO;
 import es.udc.asi.restexample.web.exceptions.IdAndBodyNotMatchingOnUpdateException;
 import es.udc.asi.restexample.web.exceptions.RequestBodyNotValidException;
 
@@ -66,5 +67,9 @@ public class PostResource {
   public void delete(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
     postService.deleteById(id);
   }
-
+  
+  @GetMapping("/tag/{id}")
+  public List<PostTagDTO> findAllByTag(@PathVariable Long id) throws NotFoundException {
+	  return postService.findAllByTag(id);
+  }
 }

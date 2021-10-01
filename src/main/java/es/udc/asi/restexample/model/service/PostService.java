@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import es.udc.asi.restexample.model.domain.Post;
+import es.udc.asi.restexample.model.domain.Tag;
 import es.udc.asi.restexample.model.exception.NotFoundException;
 import es.udc.asi.restexample.model.exception.OperationNotAllowed;
 import es.udc.asi.restexample.model.repository.PostDao;
 import es.udc.asi.restexample.model.repository.TagDao;
 import es.udc.asi.restexample.model.repository.UserDao;
 import es.udc.asi.restexample.model.service.dto.PostDTO;
+import es.udc.asi.restexample.model.service.dto.PostTagDTO;
 import es.udc.asi.restexample.model.service.dto.UserDTOPrivate;
 
 @Service
@@ -96,5 +98,12 @@ public class PostService {
 	    }
 
 	    postDAO.deleteById(id);
-	  }
+  }
+  
+  public List<PostTagDTO> findAllByTag(Long id) throws NotFoundException {
+	  Tag tag = tagDAO.findById(id);
+	  if (tag == null) throw new NotFoundException(id.toString(), Tag.class);
+	  
+	  return postDAO.findAllByTag(id).stream().map(post -> new PostTagDTO(post)).collect(Collectors.toList());
+  }
 }
