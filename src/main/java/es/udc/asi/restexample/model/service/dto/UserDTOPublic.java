@@ -18,9 +18,11 @@ public class UserDTOPublic {
 		this.id = user.getId();
 		this.login = user.getLogin();
 		this.setActive(user.isActive());
-		user.getPosts().forEach((post) -> {
-			this.posts.add(new PostDTO(post.getId(), post.getTitle(), post.getBody(), post.getTags(), post.getTimestamp()));
-		});
+		if (user.isActive()) {
+			user.getPosts().forEach((post) -> {
+				this.posts.add(new PostDTO(post.getId(), post.getTitle(), post.getBody(), post.getTags(), post.getTimestamp()));
+			});
+		}
 	}
 
 	public Long getId() {

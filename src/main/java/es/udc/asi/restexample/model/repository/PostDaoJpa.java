@@ -12,7 +12,7 @@ public class PostDaoJpa extends GenericDaoJpa implements PostDao {
 
   @Override
   public List<Post> findAll() {
-    return entityManager.createQuery("from Post", Post.class).getResultList();
+    return entityManager.createQuery("select p from Post p join p.author u WHERE u.active = TRUE", Post.class).getResultList();
   }
 
   @Override
@@ -32,7 +32,7 @@ public class PostDaoJpa extends GenericDaoJpa implements PostDao {
 
   @Override
   public List<Post> findAllByTag(Long tagId) {
-    return entityManager.createQuery("select p from Post p join p.tags pt where pt.id = :tagId", Post.class)
+    return entityManager.createQuery("select p from Post p join p.tags pt join p.author u where pt.id = :tagId and u.active = TRUE", Post.class)
         .setParameter("tagId", tagId).getResultList();
   }
 

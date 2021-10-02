@@ -38,12 +38,12 @@ public class UserResource {
   }
   
   @PutMapping("/{id}/activate")
-  public void activate(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
-	  userService.updateActive(id, true);
+  public UserDTOPublic activate(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
+	  return userService.updateActive(id, true);
   }
   
   @PutMapping("/{id}/deactivate")
-  public void deactivate(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
-	  userService.updateActive(id, false);
+  public UserDTOPublic deactivate(@PathVariable Long id) throws NotFoundException, OperationNotAllowed {
+	  return userService.updateActive(id, false);
   }
 }
