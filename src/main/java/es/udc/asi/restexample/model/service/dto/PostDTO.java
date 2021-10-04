@@ -48,6 +48,7 @@ public class PostDTO {
 		tags.forEach(t -> {
 			this.tags.add(new TagDTO(t));
 		});
+		this.tags.sort(Comparator.comparing(TagDTO::getName));
 		this.timestamp = timestamp;
 	}
 
