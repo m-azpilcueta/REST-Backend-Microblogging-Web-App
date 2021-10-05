@@ -48,6 +48,7 @@ public class TagService {
     return new TagDTO(bdTag);
   }
   
+  @PreAuthorize("hasAuthority('ADMIN')")
   @Transactional(readOnly = false)
   public void deleteById(Long id) throws NotFoundException {
     List<Post> posts = postDAO.findAllByTag(id);

@@ -34,6 +34,7 @@ public class UserService {
   @Autowired
   private PostDao postDAO;
 
+  @PreAuthorize("hasAuthority('ADMIN')")
   public List<UserDTOPublic> findAll() {
     return userDAO.findAll().stream().map(user -> new UserDTOPublic(user)).collect(Collectors.toList());
   }
